@@ -1,11 +1,15 @@
 package de.webis.opendns_domain_parser;
 
+import lombok.SneakyThrows;
+
 public class App {
+	@SneakyThrows
 	public static void main(String[] args) {
 		printHeader();
 		
 		for(String domain: args) {
 			reportForDomain(domain);
+			Thread.sleep(5000);
 		}
 	}
 	

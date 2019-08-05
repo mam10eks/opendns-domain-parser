@@ -1,5 +1,6 @@
 package de.webis.opendns_domain_parser;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,19 +10,28 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import lombok.SneakyThrows;
+import net.jodah.failsafe.Failsafe;
+import net.jodah.failsafe.RetryPolicy;
 
 public class OpenDnsParser {
 
 	private static final String OPENDNS_ENDPOINT = "https://domain.opendns.com/";
 
+	public static RetryPolicy<DomainReport> retryPolicy = new RetryPolicy<DomainReport>()
+			  .handle(Exception.class)
+			  .withBackoff(5, 180, ChronoUnit.SECONDS)
+			  .withMaxRetries(3);
+	
 	@SneakyThrows
 	public static DomainReport parseOpenDnsForDomain(String domain) {
-		Document doc = Jsoup.connect(OPENDNS_ENDPOINT + domain).get();
-		
-		return new DomainReport(
-				isTopSite(doc),
-				extractTags(doc)
-		);
+		return Failsafe.with(retryPolicy).get(() -> {
+			Document doc = Jsoup.connect(OPENDNS_ENDPOINT + domain).get();
+			
+			return new DomainReport(
+					isTopSite(doc),
+					extractTags(doc)
+			);
+		});
 	}
 
 	private static boolean isTopSite(Document doc) {
