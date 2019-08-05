@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -25,7 +26,10 @@ public class OpenDnsParser {
 	@SneakyThrows
 	public static DomainReport parseOpenDnsForDomain(String domain) {
 		return Failsafe.with(retryPolicy).get(() -> {
-			Document doc = Jsoup.connect(OPENDNS_ENDPOINT + domain).get();
+			Connection conn = Jsoup.connect(OPENDNS_ENDPOINT + domain);
+			conn.timeout(120* 1000);
+			
+			Document doc = conn.get();
 			
 			return new DomainReport(
 					isTopSite(doc),
