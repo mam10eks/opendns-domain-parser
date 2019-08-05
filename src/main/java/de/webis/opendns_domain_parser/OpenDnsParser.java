@@ -1,5 +1,9 @@
 package de.webis.opendns_domain_parser;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -16,7 +20,7 @@ public class OpenDnsParser {
 		
 		return new DomainReport(
 				isTopSite(doc),
-				extractTag(doc)
+				extractTags(doc)
 		);
 	}
 
@@ -24,11 +28,15 @@ public class OpenDnsParser {
 		return doc.select("img[src*='icon_topsite.gif']").size() == 1;
 	}
 	
-	private static String extractTag(Document doc) {
-		Elements tags = doc.select("h3>span[class='normal']");
+	private static List<String> extractTags(Document doc) {
+		Elements tagsElement = doc.select("h3>span[class='normal']");
+		String[] tags = tagsElement.size() != 1 
+				? new String[] {}
+				: tagsElement.get(0).text().trim().split(",");
 		
-		return tags.size() != 1
-				? null 
-				: tags.get(0).text().trim();
+		return Arrays.asList(tags)
+					.stream().
+					map(i -> i.trim())
+					.collect(Collectors.toList());
 	}
 }

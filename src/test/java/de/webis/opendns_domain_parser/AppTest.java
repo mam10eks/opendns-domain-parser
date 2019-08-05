@@ -18,9 +18,9 @@ public class AppTest {
     @Test
     public void testAppWithWebisAndTwoDomains() {
     	OpenDnsParserTest.mockJsoupConnectToReturnTestResource("webis.de");
-    	String expected = "domain\ttag\tis-top-site\n"
-    			+ "domain-1\tnull\tfalse\n"
-    			+ "domain-2\tnull\tfalse\n";
+    	String expected = "domain\ttags\tis-top-site\n"
+    			+ "domain-1\t[]\tfalse\n"
+    			+ "domain-2\t[]\tfalse\n";
     	
     	App.main(new String[] {"domain-1", "domain-2"});
     	String actual = systemOutRule.getLog();
@@ -31,8 +31,8 @@ public class AppTest {
     @Test
     public void testAppWithUniHalleAndOneDomain() {
     	OpenDnsParserTest.mockJsoupConnectToReturnTestResource("uni-halle.de");
-    	String expected = "domain\ttag\tis-top-site\n"
-    			+ "domain-1\tEducational Institutions\tfalse\n";
+    	String expected = "domain\ttags\tis-top-site\n"
+    			+ "domain-1\t[Educational Institutions]\tfalse\n";
     	
     	App.main(new String[] {"domain-1"});
     	String actual = systemOutRule.getLog();
@@ -43,8 +43,8 @@ public class AppTest {
     @Test
     public void testAppWithGoogleAndOneDomain() {
     	OpenDnsParserTest.mockJsoupConnectToReturnTestResource("google.com");
-    	String expected = "domain\ttag\tis-top-site\n"
-    			+ "domain-1\tSearch Engines\ttrue\n";
+    	String expected = "domain\ttags\tis-top-site\n"
+    			+ "domain-1\t[Search Engines]\ttrue\n";
     	
     	App.main(new String[] {"domain-1"});
     	String actual = systemOutRule.getLog();

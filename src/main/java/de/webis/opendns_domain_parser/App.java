@@ -10,12 +10,12 @@ public class App {
 	}
 	
 	private static void printHeader() {
-		System.out.println("domain\ttag\tis-top-site");
+		System.out.println("domain\ttags\tis-top-site");
 	}
 	
 	private static void reportForDomain(String domain) {
 		DomainReport domainReport = OpenDnsParser.parseOpenDnsForDomain(domain);
 		
-		System.out.println(domain + "\t" + domainReport.getTag() + "\t" + domainReport.isTopSite());
+		System.out.println(domain + "\t" + domainReport.getTags() + "\t" + domainReport.isTopSite());
 	}
 }

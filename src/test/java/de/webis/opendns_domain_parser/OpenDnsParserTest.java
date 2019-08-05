@@ -2,6 +2,7 @@ package de.webis.opendns_domain_parser;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Connection;
@@ -27,7 +28,7 @@ public class OpenDnsParserTest {
 	@Test
 	public void testParsingOfWebis() {
 		mockJsoupConnectToReturnTestResource("webis.de");
-		DomainReport expected = new DomainReport(false, null);
+		DomainReport expected = new DomainReport(false, Arrays.asList());
 		DomainReport actual = OpenDnsParser.parseOpenDnsForDomain(TEST_DOMAIN);
 		
 		Assert.assertEquals(expected, actual);
@@ -36,7 +37,7 @@ public class OpenDnsParserTest {
 	@Test
 	public void testParsingOfAmazon() {
 		mockJsoupConnectToReturnTestResource("amazon.de");
-		DomainReport expected = new DomainReport(true, "Ecommerce/Shopping");
+		DomainReport expected = new DomainReport(true, Arrays.asList("Ecommerce/Shopping"));
 		DomainReport actual = OpenDnsParser.parseOpenDnsForDomain(TEST_DOMAIN);
 		
 		Assert.assertEquals(expected, actual);
@@ -45,7 +46,7 @@ public class OpenDnsParserTest {
 	@Test
 	public void testParsingOfGoogle() {
 		mockJsoupConnectToReturnTestResource("google.com");
-		DomainReport expected = new DomainReport(true, "Search Engines");
+		DomainReport expected = new DomainReport(true, Arrays.asList("Search Engines"));
 		DomainReport actual = OpenDnsParser.parseOpenDnsForDomain(TEST_DOMAIN);
 		
 		Assert.assertEquals(expected, actual);
@@ -55,7 +56,16 @@ public class OpenDnsParserTest {
 	@Test
 	public void testParsingOfUniHalle() {
 		mockJsoupConnectToReturnTestResource("uni-halle.de");
-		DomainReport expected = new DomainReport(false, "Educational Institutions");
+		DomainReport expected = new DomainReport(false, Arrays.asList("Educational Institutions"));
+		DomainReport actual = OpenDnsParser.parseOpenDnsForDomain(TEST_DOMAIN);
+		
+		Assert.assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testParsingOfAdobe() {
+		mockJsoupConnectToReturnTestResource("adobe.com");
+		DomainReport expected = new DomainReport(true, Arrays.asList("Software/Technology", "Business Services"));
 		DomainReport actual = OpenDnsParser.parseOpenDnsForDomain(TEST_DOMAIN);
 		
 		Assert.assertEquals(expected, actual);
