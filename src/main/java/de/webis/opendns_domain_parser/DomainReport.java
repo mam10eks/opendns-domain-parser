@@ -1,11 +1,17 @@
 package de.webis.opendns_domain_parser;
 
+import java.io.Serializable;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class DomainReport {
-	private final boolean topSite;
-	private final List<String> tags;
+@NoArgsConstructor
+@AllArgsConstructor
+@SuppressWarnings("serial")
+public class DomainReport implements Serializable {
+	private boolean topSite;
+	private List<String> tags;
 }
